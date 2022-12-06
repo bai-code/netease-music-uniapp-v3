@@ -1,17 +1,66 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "网易云音乐(仿)",
+				"navigationBarBackgroundColor": "#EC4141"
+			}
+		}, {
+			"path": "pages/video/video",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		}, {
+			"path": "pages/mine/mine",
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
 		}
 	],
+	"subPackages": [{
+		"root": "subPackages",
+		"pages": [{
+			"path": "search/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"navigationBarBackgroundColor": "#EC4141"
+			}
+		}, {
+			"path": "search-result/search-result",
+			"style": {
+				"navigationBarTitleText": "搜索结果",
+				"enablePullDownRefresh": false
+			}
+
+		}]
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
-	"uniIdRouter": {}
+	"uniIdRouter": {},
+	"tabBar": {
+		"list": [{
+				"text": "首页",
+				"pagePath": "pages/home/home",
+				"iconPath": "static/icon/home.png",
+				"selectedIconPath": "static/icon/home-active.png"
+			},
+			{
+				"text": "视屏",
+				"pagePath": "pages/video/video",
+				"iconPath": "static/icon/video.png",
+				"selectedIconPath": "static/icon/video-active.png"
+			}, {
+				"text": "我的",
+				"pagePath": "pages/mine/mine",
+				"iconPath": "static/icon/mine.png",
+				"selectedIconPath": "static/icon/mine-active.png"
+			}
+		]
+	}
+
 }

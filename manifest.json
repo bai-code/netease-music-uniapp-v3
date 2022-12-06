@@ -1,7 +1,7 @@
 {
     "name" : "netease-music-uniapp",
-    "appid" : "",
-    "description" : "",
+    "appid" : "__UNI__F5BFB6A",
+    "description" : "网易云音乐（仿）",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -50,9 +50,11 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wx9903d89c36b248ab",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "es6" : true,
+            "minified" : true
         },
         "usingComponents" : true
     },

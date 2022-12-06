@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "网易云音乐(仿)",
+  "navigationBarBackgroundColor": "#EC4141",
+  "usingComponents": {
+    "nav-header": "../../components/nav-header/nav-header"
+  }
+}
