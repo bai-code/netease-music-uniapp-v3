@@ -36,9 +36,6 @@
 
 <script setup>
 	import {
-		$http
-	} from '@escook/request-miniprogram';
-	import {
 		ref,
 		onMounted
 	} from 'vue'

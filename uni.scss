@@ -18,7 +18,16 @@ $bgColor:#EC4141;
 $holderColor:#888;
 $fontColor:#444;
 $lightFontColor:#888;
+$singerColor:#aaa;
 
+.sColor{
+	color: $singerColor;
+}
+.overflow{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
 /* class 变量 */ 
 @mixin flex($justify,$align){
 	display: flex;
@@ -34,7 +43,6 @@ $lightFontColor:#888;
 	@include textCenter($left);
 	top: $top;
 	transform: translate(-$left,-$top);
-	
 }
 
 /* 行为相关颜色 */
