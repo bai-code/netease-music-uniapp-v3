@@ -1,3 +1,4 @@
+import store from '@/store/index.js'
 // 添加歌手
 export const addSinger = ({list=[],singerName='ar', spaceMark='/'})=>{
 	const len = list.length
@@ -20,4 +21,22 @@ export const loopAdd = ({list=[],singerName='ar'}) =>{
 		item._singer = addSinger({list:item[singerName]})
 	})
 	return list
+}
+
+/**
+ * musicList index 传递
+ * 或者单传 musicInfo 
+ * @param {musicList}  歌曲列表
+ * @param {index}  歌曲索引
+ * @param {musicInfo}  当前歌曲信息
+ */
+export const playAndCommit= ({ musicList=[],index,musicInfo={}})=>{
+	let info = musicInfo
+	if(musicList.length>0){
+		info = musicList[index]
+		store.commit('saveMusicList',{musicList})
+	}
+	store.commit('saveMusicInfo', {musicInfo:info,index})
+	store.dispatch('getMusicInfo',{musicInfo:info,index})
+	// console.log(musicList[index],musicInfo);
 }
