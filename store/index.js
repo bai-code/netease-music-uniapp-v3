@@ -17,13 +17,16 @@ const musicInfo = info && JSON.parse(info) || tempMusicInfo
 const list = localStorage.getItem('musicList')
 const musicList = list&&JSON.parse(list) || []
 
+const level = localStorage.getItem('level') || 'standard'
+
 export default createStore({
 	state:{
 			musicInfo,  // 当前播放歌曲信息
 			musicList, // 歌曲列表
+			isPlay:false, // 播放状态
 			currentTime:0, //当前播放进度
 			durationTime:0, // 当前歌曲总时长
-			level:'standard', // 音质
+			level, // 音质
 			current:-1, //当前播放第几首
 	},
 	getters:{
@@ -48,12 +51,20 @@ export default createStore({
 			audio.pause()
 		},
 		saveUrlAndDurationTime(state,{url,durationTime, level}){
-			console.log(state.musicInfo,url);
 			audio.src=url
-			audio.play()
 			state.level = level
 			state.musicInfo.url=url
 			state.durationTime=durationTime
+		},
+		changePlayStatus(state,{ isPlay }){
+			if(isPlay){
+				if(audio.src){
+					audio.play()
+				}
+			}else{
+				audio.pause()
+			}
+			state.isPlay = isPlay
 		},
 		// 保存歌曲当前播放信息
 		saveMusicInfo(state, {musicInfo,index}){
@@ -76,25 +87,57 @@ export default createStore({
 		saveMusicList(state,{ musicList }){
 			state.musicList = musicList
 			localStorage.setItem('musicList', JSON.stringify(musicList))
+		},
+		changeToneQuality(state, { level }){
+			state.level = level
+		},
+		timeUpdate(state,{currentTime}){
+			state.currentTime = currentTime
 		}
 	},
 	actions:{
 		getInfo(){
 			
 		},
-		async getMusicInfo({state,commit},{ musicInfo,level='standard', index }){
+		async getMusicInfo({state,commit},{ musicInfo, level='standard', index, isPlay=true }){
 			const  { id }  =musicInfo
 			const _level = level || state.level
+			// 保存歌曲信息
+			commit('saveMusicInfo', { musicInfo, index })
 			// 当 选取音质和之前一致，不重新请求
 			if(level === state.musicInfo.level)return 
 			const {data=[]} = await axios({url:`/song/url/v1?id=${id}&level=${_level}`})
 			if(data[0]){
-				console.log(data[0]);
 				const { time, url, level } = data[0]
 				commit('saveUrlAndDurationTime',{url,durationTime:time, level})
-				
+				if(isPlay!==state.isPlay || isPlay){
+					commit('changePlayStatus', { isPlay })
+				}
+				if(_level!==state.level){
+					commit('chagneToneQuality', { level:_level })
+				}
 			}
 			// console.log(res)
+		},
+		changeMusic({ state, getters, commit, dispatch }, { params='next' }){
+			const list = state.musicList
+			const len = list.length
+			// const musicInfo = state.musicList
+			let index = getters.findCurrentPlayIndex(list)
+			if(params==='next'){
+				if(index===len-1){
+					index = 0
+				}else{
+					index += 1
+				}
+			} else {
+				if(index===0){
+					index = len - 1
+				} else {
+					index -= 1
+				}
+			}
+			dispatch('getMusicInfo', {musicInfo:list[index], index })
 		}
 	}
 })

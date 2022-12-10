@@ -1,0 +1,72 @@
+{
+  "id": "3284365",
+  "name": "h5-music",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1359164",
+      "name": "错误列表",
+      "font_class": "list",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "6268297",
+      "name": "拍视频",
+      "font_class": "video",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "11079195",
+      "name": "向右",
+      "font_class": "right",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "666889",
+      "name": "搜索",
+      "font_class": "search",
+      "unicode": "e693",
+      "unicode_decimal": 59027
+    },
+    {
+      "icon_id": "980892",
+      "name": "开始",
+      "font_class": "play",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "989480",
+      "name": "暂停",
+      "font_class": "pause",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "8341784",
+      "name": "上一首",
+      "font_class": "prev",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "8341786",
+      "name": "下一首",
+      "font_class": "next",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "17542037",
+      "name": "每日推荐",
+      "font_class": "tuijian",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    }
+  ]
+}

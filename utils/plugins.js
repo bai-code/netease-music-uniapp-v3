@@ -36,7 +36,5 @@ export const playAndCommit= ({ musicList=[],index,musicInfo={}})=>{
 		info = musicList[index]
 		store.commit('saveMusicList',{musicList})
 	}
-	store.commit('saveMusicInfo', {musicInfo:info,index})
 	store.dispatch('getMusicInfo',{musicInfo:info,index})
-	// console.log(musicList[index],musicInfo);
 }

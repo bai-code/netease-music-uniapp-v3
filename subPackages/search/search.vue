@@ -16,7 +16,7 @@
 			</view>
 		</view>
 		<!-- 热搜列表 -->
-		<view class="hot-search">
+		<view class="hot-search" v-if='hotSearchList.length>0'>
 			<text class='h-s'>热搜推荐:</text>
 			<u-row class="hot-s">
 				<u-col class="h-item" v-for="(item,index) in hotSearchList" :key='item.content+item.searchWord'
@@ -32,13 +32,11 @@
 			</u-row>
 		</view>
 	</view>
+	<audio-control-panel></audio-control-panel>
 </template>
 
 <script setup>
-	import {
-		ref,
-		onMounted
-	} from 'vue'
+	import { ref, onMounted } from 'vue'
 
 	const defaultPlaceholder = ref('') // 默认input框placeholder文字
 	const inputValue = ref('')
@@ -67,13 +65,11 @@
 	const hotSearchList = ref([])
 	const getHotSearchList = async () => {
 		const {
-			data
+			data = []
 		} = await uni.$axios({
 			url: '/search/hot/detail'
 		})
 		hotSearchList.value = data
-		console.log(data);
-		// console.log(uni.$axios);
 	}
 
 	// 默认关键词

@@ -5,12 +5,8 @@
 </template>
 
 <script setup>
-	import {
-		onLoad
-	} from '@dcloudio/uni-app'
-	import {
-		ref
-	} from 'vue'
+	import { onLoad } from '@dcloudio/uni-app'
+	import { ref } from 'vue'
 
 	const searchList = ref([])
 	const getSearchResult = async (s) => {
@@ -27,7 +23,6 @@
 			title: `搜索 -- ${s}`,
 		})
 		searchList.value = songs
-		console.log(songs);
 	}
 
 	onLoad((options) => {

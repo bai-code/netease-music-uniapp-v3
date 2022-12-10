@@ -11,6 +11,8 @@
 				</view>
 			</template>
 		</nav-header>
+		
+		<audio-control-panel></audio-control-panel>
 	</view>
 </template>
 
