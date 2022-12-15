@@ -32,7 +32,6 @@
 			</u-row>
 		</view>
 	</view>
-	<audio-control-panel></audio-control-panel>
 </template>
 
 <script setup>

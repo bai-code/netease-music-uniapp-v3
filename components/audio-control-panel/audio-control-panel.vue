@@ -1,10 +1,10 @@
 <template>
 	<view class='audio-control-panel'>
 		<view class="music-info">
-			<view class="image">
+			<navigator class="image" open-type="navigate" url="/subPackages/music-detail/music-detail" >
 				<image :src="musicInfo.picUrl" class='image'
 				 :style="{transform:`rotate(${imgDeg}deg)`}" mode='aspecFill'></image>
-			</view>
+			</navigator>
 			<view class="music-name">
 				<text class="name">{{ musicInfo.name }}</text>
 				<text class="singer">&nbsp; - &nbsp;{{ musicInfo._singer }}</text>
@@ -23,24 +23,20 @@
 			<view class="next" @click="changeMusic">
 				<text class='iconfont icon-next'></text>
 			</view>
-			<view class="list" @click="spreadList">
-				<text class='iconfont icon-list'></text>
-				<view class="container"  :style="{height:isSpread?windowH:0,width:windowW}">
-					<music-list-table :musicList='musicList' :showImage='false' :showOther='false'></music-list-table>
-				</view>
+			<view class="list" >
+				<toggle-spread-musicList />
 			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	import { ref, computed, onMounted } from 'vue'
+	import { ref, computed } from 'vue'
 	import { useStore } from 'vuex'
+	import { onShow, onHide } from '@dcloudio/uni-app'
 
 	const store = useStore()
-	const musicList = computed(() => {
-		return store.state.musicList
-	})
+	
 	const musicInfo = computed(() => {
 		return store.state.musicInfo
 	})
@@ -51,14 +47,18 @@
 	const timer = ref(null)
 	const imgDeg = ref(0)
 	
+	const startInterval = ()=>{
+		timer.value = setInterval(()=>{
+			imgDeg.value += 1
+		},30)
+	}
 	// 改变播放状态
 	const changePlayStatus = (status) => {
 		if(status==='play'){
-			timer.value = setInterval(()=>{
-				imgDeg.value += 1
-			},30)	
+				startInterval()
 		}else{
 			clearInterval(timer.value)
+			timer.value = null
 		}
 		
 		store.commit('changePlayStatus', {
@@ -69,33 +69,21 @@
 	const changeMusic = () => {
 		store.dispatch('changeMusic', {})
 	}
-
-	const isSpread = ref(false) // 是否展开
-	const domRef = ref()
-	// 注册展开事件
-	const registerEvent = (e)=>{
-		const listContainer = domRef.value.$el
-		if (!listContainer.contains(e.target)) {
-			isSpread.value = false
-			document.removeEventListener('click', registerEvent)
-		} 
-	}
-	// 展开事件
-	const spreadList = () => {
-		isSpread.value = true
-		if (isSpread.value) {
-			document.addEventListener('click', registerEvent)
+	
+	onShow(()=>{
+		if(isPlay.value){
+			clearInterval(timer.value)
+			startInterval()
 		}
-	}
-	const windowH = ref(0)
-	const windowW = ref(0)
-	onMounted(() => {
-		const info = uni.getSystemInfoSync()
-		const { windowHeight, windowWidth } = info
-		windowH.value = windowHeight - 200 + 'px'
-		windowW.value = windowWidth * 0.95 + 'px'
+	})
+	onHide(()=>{
+		clearInterval(timer.value)
+		// console.log(timer.value);/*  */
 	})
 	
+	// onBeforeUnmount(()=>{
+	// 	clearInterval(timer.value)
+	// })
 </script>
 
 <style lang="scss" scoped>
@@ -117,7 +105,7 @@
 			@include flex(flex-start, center);
 			width: 65%;
 			flex: 0 0 auto;
-			view.image {
+			navigator.image {
 				flex: 0 0 auto;
 				height: 80rpx;
 				width: 80rpx;
@@ -154,40 +142,6 @@
 				font-size: 45rpx;
 			}
 
-			view.list {
-				view.container {
-					position: absolute;
-					bottom: 100rpx;
-					left: 50%;
-					overflow: hidden;
-					transform: translateX(-50%);
-					box-shadow: 0 -2rpx 10rpx #ccc;
-					transition: height 0.5s;
-
-					:deep(.music-list-table) {
-						padding: 10rpx;
-
-						view.music-info {
-							max-width: 100%;
-
-							view.name {
-								@include flex(flex-start, center);
-
-								text.name {
-									font-size: 26rpx;
-									flex: 0 0 auto;
-								}
-
-								text.singer {
-									font-size: 24rpx;
-									white-space: nowrap;
-									color: $lightFontColor;
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 </style>

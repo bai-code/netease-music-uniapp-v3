@@ -42,6 +42,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "music-detail/music-detail",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 	}],
 	"globalStyle": {

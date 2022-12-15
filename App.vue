@@ -38,6 +38,9 @@
 
 <style lang='scss'>
 	/* uview样式 */
+	page,body{
+		height: 100%;
+	}
 	@import "@/uni_modules/uview-plus/index.scss";
 
 	body,

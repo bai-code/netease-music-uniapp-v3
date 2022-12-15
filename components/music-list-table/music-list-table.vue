@@ -10,8 +10,8 @@
 						</u-avatar>
 					</template>
 				</u-cell>
-				<view class="music-info">
-					<view class="name overflow">
+				<view class="music-info" :class="{bespread:!showOther}">
+					<view class="name overflow" >
 						<text class='name'>{{item.name}} </text>
 						<text class='singer overflow' v-if='!showOther'> &nbsp; - &nbsp;{{item._singer}}</text>
 					</view>
@@ -120,10 +120,14 @@
 					flex: 1 1 auto;
 					max-width: calc(100% - 200rpx);
 					overflow: hidden;
-
+					&.bespread{
+						width: 100% !important;
+						max-width: 100%;
+					}
 					view.name {
 						flex: 0 0 auto;
 						width: 100%;
+						
 					}
 
 					view.singer,

@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import  axios from '@/utils/axios.js' 
 import audio from '@/utils/audio.js'
+import { transTime } from '@/utils/plugins.js'
 // 创建audio对象
 
 const tempMusicInfo = {
@@ -31,17 +32,32 @@ export default createStore({
 	},
 	getters:{
 		findCurrentPlayIndex(state){
-			return function (list){
+			return  (list) => {
+				const _list = list || state.musicList
 				const targetList = JSON.stringify(state.musicList)
-				const originList = JSON.stringify(list)
+				const originList = JSON.stringify(_list)
 				if(targetList === originList){
 					const {  id } = state.musicInfo
-					return list.findIndex(item=>{
+					return _list.findIndex(item=>{
 						return item.id === id
 					})
 				}
 			}
-		}
+		},
+		setPrecentage(state){
+			const { currentTime, durationTime } = state
+			// 切换歌曲 durationTime 可能变成0，进度抖动
+			if(!currentTime||!durationTime)return 0
+			return parseInt((currentTime/durationTime)*100)
+		},
+		setCurrentTime(state){
+			const {currentTime} =state
+			return transTime(currentTime)
+		},
+		setDurationTime(state){
+			const { durationTime } = state
+			return transTime(durationTime)
+		},
 	},
 	mutations:{
 		play(){
@@ -91,13 +107,31 @@ export default createStore({
 		changeToneQuality(state, { level }){
 			state.level = level
 		},
+		// 用于动态更新 播放进度
 		timeUpdate(state,{currentTime}){
 			state.currentTime = currentTime
+		},
+		// 用于初始更新时间
+		updateDateTime(state,{currentTime,durationTime}){
+			state.currentTime = currentTime
+			state.durationTime = durationTime
+		},
+		// 播放时间跳转
+		seekProgress(state, { time /*占进度条百分比*/ , s /*时间  s */ }){
+			if(s===0 || s){
+				audio.seek(s)
+			}else{
+				const { durationTime } = state
+				audio.seek(durationTime * (time / 100))
+			}
 		}
 	},
 	actions:{
-		getInfo(){
-			
+		async getInfo({state}, { path }){
+			const res = await axios({ url:path})
+			if(res.code === 200 ){
+				return res
+			}
 		},
 		async getMusicInfo({state,commit},{ musicInfo, level='standard', index, isPlay=true }){
 			const  { id }  =musicInfo
@@ -109,7 +143,7 @@ export default createStore({
 			const {data=[]} = await axios({url:`/song/url/v1?id=${id}&level=${_level}`})
 			if(data[0]){
 				const { time, url, level } = data[0]
-				commit('saveUrlAndDurationTime',{url,durationTime:time, level})
+				commit('saveUrlAndDurationTime',{url,durationTime:time/1000, level})
 				if(isPlay!==state.isPlay || isPlay){
 					commit('changePlayStatus', { isPlay })
 				}
@@ -119,9 +153,10 @@ export default createStore({
 			}
 			// console.log(res)
 		},
-		changeMusic({ state, getters, commit, dispatch }, { params='next' }){
+		changeMusic({ state, getters, commit, dispatch }, { params='next' }={}){
 			const list = state.musicList
 			const len = list.length
+			commit('updateDateTime', { currentTime:0, durationTime: 0}) //切换歌曲，初始化进度条和开始时间
 			// const musicInfo = state.musicList
 			let index = getters.findCurrentPlayIndex(list)
 			if(params==='next'){

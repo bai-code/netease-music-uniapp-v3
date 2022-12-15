@@ -38,3 +38,23 @@ export const playAndCommit= ({ musicList=[],index,musicInfo={}})=>{
 	}
 	store.dispatch('getMusicInfo',{musicInfo:info,index})
 }
+
+export const fillNum = (num, fillNum =2/*填充到几位数*/)=>{
+	return (parseInt(num)+'').padStart(fillNum,'0')
+}
+
+
+// 时间转换 
+export const transTime = (time, isMs = false)=>{
+	let t = time 
+	if(isMs){
+		t = t / 1000 
+	}
+	let s = t 
+	let m = 0
+	if(t>60){
+		m = Math.floor(t/60)
+		s = t % 60
+	}
+	return `${ fillNum(m) }:${ fillNum(s) }`
+} 
