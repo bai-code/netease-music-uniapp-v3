@@ -1,3 +1,5 @@
+import userInfo from './userInfo.js'
+
 import { createStore } from 'vuex'
 import  axios from '@/utils/axios.js' 
 import audio from '@/utils/audio.js'
@@ -135,6 +137,7 @@ export default createStore({
 		},
 		async getMusicInfo({state,commit},{ musicInfo, level='standard', index, isPlay=true }){
 			const  { id }  =musicInfo
+			if(!id)return 
 			const _level = level || state.level
 			// 保存歌曲信息
 			commit('saveMusicInfo', { musicInfo, index })
@@ -174,5 +177,8 @@ export default createStore({
 			}
 			dispatch('getMusicInfo', {musicInfo:list[index], index })
 		}
+	},
+	modules:{
+		userInfo
 	}
 })

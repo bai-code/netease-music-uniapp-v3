@@ -21,9 +21,9 @@ export default function({
 	url,
 	method = 'GET'
 }) {
-	return new Promise(async(resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		// 请求前
-		
+
 		// 添加await 可以按照顺序保证请求后可以做些什么
 		await uni.request({
 			url: 'http://localhost:3000' + url,
@@ -35,6 +35,7 @@ export default function({
 		}).catch(err => {
 			reject(err)
 		})
+		//TODO handle the exception
 		// 请求完成后
 	})
 }

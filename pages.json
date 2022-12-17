@@ -51,6 +51,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "user-login/user-login",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 	}],
 	"globalStyle": {
