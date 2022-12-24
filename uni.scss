@@ -20,6 +20,7 @@ $fontColor:#444;
 $lightFontColor:#888;
 $singerColor:#aaa;
 $primary: #007aff;
+$_bgColor:#eee;  //个别内容背景图
 
 .sColor{
 	color: $singerColor;
@@ -28,6 +29,14 @@ $primary: #007aff;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+@mixin overflowMul($num) {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: $num;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 /* class 变量 */ 
 @mixin flex($justify,$align){

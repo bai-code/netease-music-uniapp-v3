@@ -36,7 +36,9 @@
 		background-color: $bgColor;
 		padding: 5rpx 20rpx;
 		box-sizing: border-box;
-		// @include flex(space-between,center);
+		position: sticky;
+		top: 0;
+		z-index: 999;
 		view.nav-header {
 			position: relative;
 			@include flex(space-between, center);

@@ -3,7 +3,7 @@ import uviewPlus from '@/uni_modules/uview-plus'
 import $axios from '@/utils/axios.js'
 import store from '@/store/index.js'
 // 图标样式
-import '@/utils/iconfont/iconfont.css'
+// import '@/utils/iconfont/iconfont.css'
 
 uni.$axios = $axios
 

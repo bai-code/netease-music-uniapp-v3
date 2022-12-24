@@ -6,14 +6,14 @@
 			>
 				<u-cell v-if='showImage'>
 					<template #icon>
-						<u-avatar shape="square" size="45" :src='item.al.picUrl'>
+						<u-avatar shape="square" size="45" :src='item.picUrl||item.al.picUrl'>
 						</u-avatar>
 					</template>
 				</u-cell>
 				<view class="music-info" :class="{bespread:!showOther}">
 					<view class="name overflow" >
 						<text class='name'>{{item.name}} </text>
-						<text class='singer overflow' v-if='!showOther'> &nbsp; - &nbsp;{{item._singer}}</text>
+						<text class='singer overflow' v-if='!showOther'> &nbsp; - &nbsp; {{item._singer || item.artist}}</text>
 					</view>
 					<view class="singer" v-if="showOther">
 						<view class="icon icons" v-if='item.originCoverType===1&&showOther'>
@@ -28,7 +28,7 @@
 						<text class='singer' v-if="showOther" :class="{overflow:!(item.al&&item.al.name)}">{{item._singer }} </text>
 						<text class='al overflow' v-if='item.al&&item.al.name&&showOther'>-{{item.name}}</text>
 					</view>
-					<view class="alias sColor overflow" v-if='item.alia.length>0 && showOther'>
+					<view class="alias sColor overflow" v-if='item.alia&&item.alia.length>0 && showOther'>
 						{{item.alia[0]}}
 					</view>
 				</view>
@@ -123,11 +123,16 @@
 					&.bespread{
 						width: 100% !important;
 						max-width: 100%;
+						@include flex(flex-start,center);
+						flex-direction: row;
 					}
 					view.name {
 						flex: 0 0 auto;
 						width: 100%;
-						
+						text.singer{
+							font-size: 26rpx;
+							color: $singerColor;
+						}
 					}
 
 					view.singer,

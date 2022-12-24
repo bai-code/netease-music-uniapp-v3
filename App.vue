@@ -40,6 +40,7 @@
 	/* uview样式 */
 	page,body{
 		height: 100%;
+		overflow: hidden
 	}
 	@import "@/uni_modules/uview-plus/index.scss";
 
