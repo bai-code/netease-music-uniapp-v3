@@ -1,6 +1,7 @@
 <template>
 	<view class="user-login">
-		<u--form labelPosition="left" :model="model" :rules="rules" ref="formRef" labelWidth="50">
+		<u--form labelPosition="left" :model="model" :rules="rules" 
+		ref="formRef" labelWidth="50" v-if="loginMode!=='qrCode'"> 
 			<u-form-item label="邮箱" prop="userInfo.email" borderBottom v-if="loginMode==='email'">
 				<u--input v-model="model.userInfo.email" border="none"></u--input>
 			</u-form-item>
@@ -8,7 +9,7 @@
 				<u--input v-model="model.userInfo.phone" border="none" ></u--input>
 			</u-form-item>
 			<u-form-item label="密 码" v-if='loginMode !=="phoneCode"' prop="userInfo.password" borderBottom >
-				<u--input v-model="model.userInfo.password" border="none"></u--input>
+				<u--input v-model="model.userInfo.password" type='password' border="none"></u--input>
 			</u-form-item>
 			<u-form-item label="验证码" class='code' v-if='loginMode==="phoneCode"' prop="userInfo.code" borderBottom >
 				<u--input v-model="model.userInfo.code" border="none"></u--input>
@@ -21,10 +22,14 @@
 				<u-button @click="submit">提交</u-button>
 			</u-form-item>
 		</u--form>
+		<view class="qr-code" v-else>
+			
+		</view>
 		<view class="change-login-mode">
 			<text v-if="loginMode!='phonePwd'" @click="loginMode='phonePwd'">手机号登录</text>
 			<text v-if="loginMode!='phoneCode'" @click="loginMode='phoneCode'">验证码登录</text>
 			<text v-if="loginMode!='email'" @click="loginMode='email'">邮箱登录</text>
+			<text v-if="loginMode!='email'" @click="loginMode='qrCode'">二维码登录</text>
 		</view>
 	</view>
 </template>
@@ -32,16 +37,18 @@
 <script setup>
 	import { ref, watch } from 'vue'
 	import { useStore } from 'vuex'
+	// import axios from '@/utils/axios.js'
 
 	const store = useStore()
 
-	const loginMode = ref('phoneCode') // phonePwd 手机号密码 // phoneCode 手机号验证码  // email 邮箱登录（暂时不用）
+	const loginMode = ref('phone') // phonePwd 手机号密码 // phoneCode 手机号验证码  // email 邮箱登录（暂时不用）
 	const model = ref({
 		userInfo: {
-			phone: '',
-			password: '',
+			phone: '13735544745',
+			password: 'bgf1580087304',
 			code: '',
-			email: ''
+			email: '',
+			qrCode:''
 		},
 	})
 
@@ -91,7 +98,8 @@
 			const flag = await formRef.value.validate()
 			if (flag === true) {
 				const { phone, password, code, email } = model.value.userInfo
-				const res = await store.dispatch('userInfo/userLogin', { phone, code })
+				
+				const res = await store.dispatch('userInfo/userLogin', { phone, code, password, email })
 				console.log(res);
 				if (res) {
 					uni.navigateBack()
@@ -104,6 +112,7 @@
 			}
 			console.log(flag);
 		} catch (_) {
+			console.log(_);
 		}
 	}
 
@@ -144,7 +153,7 @@
 
 
 	// 设置 navigatorBarTitle 
-	watch(loginMode, (val) => {
+	watch(loginMode, async (val) => {
 		let txt = '手机号登录'
 		switch (val) {
 			// case 'phonePwd' : txt = '手机号登录';break;
@@ -154,11 +163,23 @@
 			case 'email':
 				txt = '邮箱登录';
 				break;
+			case 'qrCode':
+				txt = '二维码登录';
+				break;
 			default:
 				txt = '手机号登录';
 				break;
 
 		}
+		if(val==='qrCode'){
+			const { data:{ unikey } = {} } = await store.dispatch('getInfo', { path:`/login/qr/key` })
+			if(unikey){
+				const res = await store.dispatch('getInfo', { path:`/login/qr/create?key=${unikey}` })
+				console.log(res);
+			}
+			console.log(unikey);
+		}
+		
 		uni.setNavigationBarTitle({
 			title: txt
 		})
@@ -176,6 +197,17 @@
 			height: 50rpx;
 			line-height: 50rpx;
 			font-size: 28rpx;
+		}
+
+		view.qr-code{
+			width: 100%;
+			height: 500rpx;
+			background: #0f0;
+			@include flex(center,center);
+			image{
+				height: 400rpx;
+				width: 400rpx;
+			}
 		}
 
 		// 切换登录方式

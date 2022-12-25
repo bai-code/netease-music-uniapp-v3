@@ -45,9 +45,9 @@ export default {
 				path = `/login/cellphone?phone=${phone}&captcha=${code}`
 				
 			} else {
-				path = `/login/cellphone?phone=${phone}&password=${password}`
+				path = `/login/cellphone`
 			}
-			const { token, profile } = await axios({ url: path })
+			const { token, profile } = await axios({ url: path, method:'POST' })
 			if (token) {
 				const { avatarUrl, nickname, userId } = profile
 				commit('saveInfo', { token, avatarUrl, nickname, userId })

@@ -26,6 +26,9 @@
 					store.commit('timeUpdate',{currentTime})
 				}
 			})
+			
+			
+			
 		},
 		// onShow: function() {
 		// 	console.log('App Show')
