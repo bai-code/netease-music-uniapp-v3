@@ -38,7 +38,7 @@
 						</navigator>
 					</view>
 					<view class="song-list item">
-						<navigator open-type="navigate" url="/subPackages/song-list/song-list">
+						<navigator open-type="navigate" url="/subPackages/recommend-playlist/recommend-playlist">
 							<view class="item-c">
 								<view class="iconfont icon-songlist" />
 

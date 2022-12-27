@@ -29,10 +29,8 @@ export default {
 				const res = await axios({ url: path })
 				return res
 			} catch (err) {
-				console.log(err);
+				// console.log(err);
 			}
-
-			console.log(res)
 		},
 		async userLogin({ state, commit }, { phone, password, code, email }) {
 			let path = ''

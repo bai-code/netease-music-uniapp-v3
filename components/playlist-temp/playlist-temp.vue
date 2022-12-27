@@ -1,8 +1,8 @@
 <template>
 	<!-- 歌单 模板 -->
-	<view class="play-list-temp">
+	<view class="playlist-temp">
 		<view class="image">
-			<image :src="musicInfo.picUrl" mode="scaleToFill"></image>
+			<image :src="musicInfo.picUrl|| musicInfo.coverImgUrl" mode="scaleToFill"></image>
 			<view class="play-count">
 				<text class="iconfont icon-icon-play"></text>
 				<text>{{musicInfo._playCount}}</text>
@@ -27,10 +27,12 @@
 </script>
 
 <style lang="scss">
-view.play-list-temp{
+view.playlist-temp{
 	width: 260rpx;
 	@include flex(flex-start,center);
 	flex-direction: column;
+	margin-top: 20rpx;
+	box-shadow: 0 0 5rpx #ccc;
 	view.image{
 		height: 0;
 		padding-bottom: 90%;
@@ -69,6 +71,8 @@ view.play-list-temp{
 	}
 	text.info-descript{
 		font-size: 26rpx;
+		// height: 52rpx;
+		min-height: 80rpx;
 		@include overflowMul(2);
 		width: 90%;
 		margin-top: 10rpx;
