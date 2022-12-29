@@ -132,6 +132,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "playlist-detail/playlist-detail",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 	}],
 	"globalStyle": {

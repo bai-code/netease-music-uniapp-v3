@@ -15,20 +15,20 @@ export const addSinger = ({ list = [], spaceMark = '/' }) => {
 	return str
 }
 
+export const computedCount = (num)=>{
+	if (num > 100000000) {
+		return Math.floor(num / 100000000) + '亿'
+	} else if (num > 100000) {
+		return Math.floor(num / 10000) + '万'
+	} else {
+		return num
+	}
+}
+
 export const computedPlayCount = ({ list = [], countName = '_playCount' }) => {
 	if (list.length === 0) return
-	const count = (num) => {
-		if (num > 100000000) {
-			return Math.floor(num / 100000000) + '亿'
-		} else if (num > 100000) {
-			return Math.floor(num / 10000) + '万'
-		} else {
-			return num
-		}
-	}
-
 	list.forEach(item => {
-		item[countName] = count(item.playCount)
+		item[countName] = computedCount(item.playCount)
 	})
 	return list
 }

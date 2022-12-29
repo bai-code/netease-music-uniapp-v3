@@ -1,6 +1,6 @@
 <template>
 	<!-- 歌单 模板 -->
-	<view class="playlist-temp">
+	<view class="playlist-temp" @click="linkToDetail">
 		<view class="image">
 			<image :src="musicInfo.picUrl|| musicInfo.coverImgUrl" mode="scaleToFill"></image>
 			<view class="play-count">
@@ -24,6 +24,13 @@
 			}
 		}
 	})
+	
+	const linkToDetail = () => {
+		const { id } = props.musicInfo
+		uni.navigateTo({
+			url:`/subPackages/playlist-detail/playlist-detail?pid=${id}`
+		})
+	}
 </script>
 
 <style lang="scss">

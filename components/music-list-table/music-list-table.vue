@@ -10,7 +10,7 @@
 						</u-avatar>
 					</template>
 				</u-cell>
-				<view class="music-info" :class="{bespread:!showOther}">
+				<view class="music-info" :class="{bespread:!showOther, fillUp:!showImage}">
 					<view class="name overflow" >
 						<text class='name'>{{item.name}} </text>
 						<text class='singer overflow' v-if='!showOther'> &nbsp; - &nbsp; {{item._singer || item.artist}}</text>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-	import { ref,watch,watchEffect,onMounted, computed } from 'vue'
+	import { ref,watch,watchEffect,onMounted, computed, defineExpose } from 'vue'
 	import { loopAdd, playAndCommit } from '@/utils/plugins.js'
 	import { useStore } from 'vuex'
 
@@ -87,6 +87,8 @@
 			url: `/subPackages/video-detail/video-detail?vid=${vid}`,
 		});
 	}
+	
+	defineExpose({ playMusic })
 </script>
 
 <style lang="scss">
@@ -125,6 +127,10 @@
 						max-width: 100%;
 						@include flex(flex-start,center);
 						flex-direction: row;
+					}
+					&.fillUp{
+						width: 100% !important;
+						max-width: 100% !important;
 					}
 					view.name {
 						flex: 0 0 auto;
