@@ -1,9 +1,9 @@
 <template>
-	<view class='music-list-table'>
-		<u-list class='music-list'>
+	<view class='music-list-table' >
+		<u-list class='music-list-t' @scrolltolower="scrollToBottom" lowerThreshold='150'>
 			<u-list-item class='list-item' v-for='(item,index) in showMusicList' :key='item.id'
 			@click='playMusic(index)' :class='{currentActive:index===currentIndex}'
-			>
+			 >
 				<u-cell v-if='showImage'>
 					<template #icon>
 						<u-avatar shape="square" size="45" :src='item.picUrl||item.al.picUrl'>
@@ -45,6 +45,8 @@
 	import { loopAdd, playAndCommit } from '@/utils/plugins.js'
 	import { useStore } from 'vuex'
 
+	const emit = defineEmits(['scrollToBottom'])
+
 	const props = defineProps({
 		musicList: {
 			type: Array,
@@ -76,7 +78,9 @@
 	})
 	
 	const playMusic= (index)=>{
-		playAndCommit({musicList:showMusicList.value,index})
+		uni.$u.throttle(()=>{
+			playAndCommit({musicList:showMusicList.value,index})
+		},500)
 	}
 	
 // 视频页面跳转
@@ -87,17 +91,25 @@
 			url: `/subPackages/video-detail/video-detail?vid=${vid}`,
 		});
 	}
+	//滚动loadmore
+	const scrollToBottom = () => {
+		uni.$u.throttle(()=>{
+			emit('scrollToBottom')
+		}, 1000)
+	}
 	
 	defineExpose({ playMusic })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.icons {
 		flex: 0 0 auto;
 	}
 
 	view.music-list-table {
-		.u-list.music-list {
+		height: 100%;
+		.u-list.music-list-t {
+			height: calc(100% - 20rpx) !important;
 			.u-list-item.list-item {
 				flex-direction: row;
 				padding: 10rpx 15rpx;

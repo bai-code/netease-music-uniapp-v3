@@ -19,8 +19,8 @@
 
 				<!-- 收藏 分享数量 -->
 				<view class="count">
+					<view class="track-count">歌曲:<text class="num">{{trackCount}}</text></view>
 					<view>播放:<text class="num">{{playCount}}</text></view>
-					<view class="share">分享:<text class="num">{{shareCount}}</text></view>
 				</view>
 
 				<!-- 分类 -->
@@ -49,14 +49,14 @@
 		</view>
 		<view class="controls">
 			<button class="btn" @click="playAll">播放全部</button>
-			<u--input placeholder="搜索歌手/歌名" prefixIcon="search" 
-			prefixIconStyle="font-size: 22px;color: #909399" class='search'>
+			<u--input placeholder="搜索歌手/歌名" prefixIcon="search" prefixIconStyle="font-size: 22px;color: #909399"
+				class='search' @change='searchValue' v-model='inputValue'>
 			</u--input>
 		</view>
-		
-		<view class="music-list" v-if="playListDetail.tracks" >
-			<music-list-table ref="listRef" :musicList='playListDetail.tracks' :showImage='false'
-			></music-list-table>
+
+		<view class="music-list" v-if="showMusicList">
+			<music-list-table ref="listRef" :musicList='showMusicList' :showImage='false'
+				@scrollToBottom='scrollToBottom'></music-list-table>
 		</view>
 	</view>
 </template>
@@ -67,36 +67,69 @@
 	import { useStore } from 'vuex'
 	import { computedCount } from '@/utils/plugins.js'
 
-	// const pId = ref('')
+	const pId = ref('') // 专辑id
+	const total = ref(0)  //歌曲总数
 	const isSpread = ref(false) //是否展开描述
 	const listRef = ref()
 
 	const store = useStore()
 
+	const showMusicList = ref([]) // 展示歌曲列表
+	const cacheMusicList = ref([]) // 缓存歌曲列表
 	const playListDetail = shallowRef({})
 	const getPlaylistDetail = async (pid) => {
 		const { playlist = {} } = await store.dispatch('getInfo', { path: `/playlist/detail?id=${pid}` })
 		playListDetail.value = playlist
+		cacheMusicList.value = showMusicList.value = playlist.tracks || []
+		total.value = playlist.trackCount
 		console.log(playlist)
+	}
+
+	const getPlaylistTrackAll = async () => {
+		const len = cacheMusicList.value.length
+		if(len>=total.value)return
+		const { songs = [] } = await store.dispatch(
+		'getInfo', { path: `/playlist/track/all?id=${pId.value}&limit=20&offset=${len}` })
+		console.log(songs);
+		 cacheMusicList.value.push(...songs)
+		 showMusicList.value = cacheMusicList.value
+		console.log(showMusicList.value)
 	}
 
 	const playCount = computed(() => {
 		return computedCount(playListDetail.value.playCount || 0)
 	})
 
-	const shareCount = computed(() => {
-		return computedCount(playListDetail.value.shareCount || 0)
+	const trackCount = computed(() => {
+		return computedCount(playListDetail.value.trackCount || 0)
 	})
-// 播放全部
-	const playAll = () =>{
-		const playMusic = listRef.value.playMusic 
-		playMusic&&playMusic(0)
+
+
+	// 播放全部
+	const playAll = () => {
+		const playMusic = listRef.value.playMusic
+		playMusic && playMusic(0)
 	}
-	
+
+	// 滚动到底部
+	const scrollToBottom = () => {
+		getPlaylistTrackAll()
+	}
+
+	// 搜索
+	const inputValue = ref('')
+	const searchValue = () => {
+		const val = inputValue.value
+		showMusicList.value = cacheMusicList.value.filter(item=>{
+			return item.name.indexOf(val)!==-1
+		})
+		console.log(showMusicList.value, cacheMusicList.value, val);
+	}
 
 	onLoad((options) => {
 		const { pid } = options
 		getPlaylistDetail(pid)
+		pId.value = pid
 	})
 </script>
 
@@ -106,6 +139,7 @@
 		box-sizing: border-box;
 		overflow: hidden;
 		height: calc(100% - 40rpx);
+
 		view.info-detail {
 			min-height: 330rpx;
 			@include flex(space-between, flex-start);
@@ -172,14 +206,16 @@
 					font-size: 26rpx;
 					@include flex(flex-start, center);
 
+					view.track-count {
+						margin-right: 10rpx;
+					}
+
 					text.num {
 						color: $lightFontColor;
 						margin-left: 10rpx;
 					}
 
-					view.share {
-						margin-left: 10rpx;
-					}
+
 				}
 
 				// 分类
@@ -232,7 +268,8 @@
 		view.controls {
 			margin: 20rpx 0;
 			@include flex(space-between, center);
-			button{
+
+			button {
 				width: 200rpx;
 				margin: 0;
 				background: $bgColor;
@@ -241,17 +278,17 @@
 				color: #fff;
 				font-size: 26rpx;
 			}
-			.search{
-				width: 40% ;
+
+			.search {
+				width: 40%;
 				flex: 0 0 auto;
 			}
 		}
-		
-		view.music-list{
+
+		view.music-list {
 			padding: 15rpx 0;
-			// height: calc(100% - 380rpx);
+			height: calc(100% - 380rpx);
 			box-sizing: border-box;
-			// overflow: scroll;
 		}
 
 	}
