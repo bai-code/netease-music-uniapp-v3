@@ -82,7 +82,6 @@
 		playListDetail.value = playlist
 		cacheMusicList.value = showMusicList.value = playlist.tracks || []
 		total.value = playlist.trackCount
-		console.log(playlist)
 	}
 
 	const getPlaylistTrackAll = async () => {
@@ -90,10 +89,8 @@
 		if(len>=total.value)return
 		const { songs = [] } = await store.dispatch(
 		'getInfo', { path: `/playlist/track/all?id=${pId.value}&limit=20&offset=${len}` })
-		console.log(songs);
 		 cacheMusicList.value.push(...songs)
 		 showMusicList.value = cacheMusicList.value
-		console.log(showMusicList.value)
 	}
 
 	const playCount = computed(() => {
@@ -123,7 +120,6 @@
 		showMusicList.value = cacheMusicList.value.filter(item=>{
 			return item.name.indexOf(val)!==-1
 		})
-		console.log(showMusicList.value, cacheMusicList.value, val);
 	}
 
 	onLoad((options) => {
