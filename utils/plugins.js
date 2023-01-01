@@ -34,14 +34,18 @@ export const computedPlayCount = ({ list = [], countName = '_playCount' }) => {
 }
 
 // 对循环的数据进行筛选添加某个属性
-export const loopAdd = ({ list = [], singerName = 'ar', nest/*嵌套*/, reName }) => {
-	if (list.length === 0) return
+export const loopAdd = ({ list = [], singerName = 'ar', nest/*嵌套*/, reName,/*歌手从命名*/
+ playCountName}) => {
+	if (list.length === 0) return []
 	const val = reName || '_singer'
 	list.forEach(item => {
 		if(nest){
 			item[val] = addSinger({ list :item[nest][singerName] })
 		} else {
 			item._singer = addSinger({ list: item[singerName] })
+		}
+		if(playCountName){
+			item._playCount = computedCount(item[playCountName])
 		}
 	})
 	return list

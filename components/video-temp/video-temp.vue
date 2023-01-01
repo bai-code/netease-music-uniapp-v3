@@ -1,8 +1,8 @@
 <template>
 	<view class="video-temp">
-		<view class="video-container">
+		<view class="video-container" @click="linkToVideoDetail">
 			<view class="image">
-				<image class="pic" :src="videoInfo.picUrl" mode="scaleToFill"></image>
+				<image class="pic" :src="videoInfo.picUrl||videoInfo.cover" mode="scaleToFill"></image>
 				<view class="play-count" v-if="videoInfo._playCount">
 					<text class="iconfont icon-play">
 					</text>
@@ -10,24 +10,35 @@
 				</view>
 			</view>
 			<view class="description">
-				<text>{{videoInfo.name}}</text>
+				<text>{{videoInfo.name}} {{showSinger?' - ' + videoInfo._singer:''}}</text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	defineProps({
+	const props = defineProps({
 		videoInfo: {
 			type: Object,
 			default: () => {
 				return {}
 			}
+		},
+		showSinger:{
+			type:Boolean,
+			default:false
 		}
 	})
+	
+	const linkToVideoDetail = () => {
+		const { id } = props.videoInfo
+		uni.navigateTo({
+			url:`/subPackages/video-detail/video-detail?mvId=${id}`
+		})
+	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	view.video-temp {
 		position: relative;
 		height: 0;

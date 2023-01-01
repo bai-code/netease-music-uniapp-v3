@@ -70,7 +70,7 @@
 	const pId = ref('') // 专辑id
 	const total = ref(0)  //歌曲总数
 	const isSpread = ref(false) //是否展开描述
-	const listRef = ref()
+	const listRef = ref()   // 获取子元素dom对象
 
 	const store = useStore()
 

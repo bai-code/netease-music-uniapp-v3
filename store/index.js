@@ -133,7 +133,8 @@ export default createStore({
 			const res = await axios({ url:path})
 			if(res.code === 200 ){
 				return res
-			}
+			} 
+			return {}
 		},
 		async getMusicInfo({state,commit},{ musicInfo, level='standard', index, isPlay=true }){
 			const  { id }  =musicInfo

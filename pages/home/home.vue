@@ -457,7 +457,7 @@
 				view.new-song {
 					view.new-song-content {
 						:deep(.music-list-table) {
-							height: 600rpx;
+							height: 640rpx;
 						}
 					}
 				}
