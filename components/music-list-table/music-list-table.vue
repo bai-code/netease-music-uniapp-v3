@@ -1,39 +1,44 @@
 <template>
-	<view class='music-list-table' >
+	<view class='music-list-table'>
 		<u-list class='music-list-t' @scrolltolower="scrollToBottom" lowerThreshold='150'>
 			<u-list-item class='list-item' v-for='(item,index) in showMusicList' :key='item.id'
-			@click='playMusic(index)' :class='{currentActive:index===currentIndex}'
-			 >
+				@click='playMusic(index)' :class='{currentActive:index===currentIndex}'>
 				<u-cell v-if='showImage'>
 					<template #icon>
-						<u-avatar shape="square" size="45" :src='item.picUrl||item.al.picUrl'>
+						<u-avatar shape="square" size="45"
+							:src='item.picUrl||item.al&&item.al.picUrl||item.album&&item.album.blurPicUrl'>
 						</u-avatar>
 					</template>
 				</u-cell>
 				<view class="music-info" :class="{bespread:!showOther, fillUp:!showImage}">
-					<view class="name overflow" >
-						<text class='name'>{{item.name}} </text>
-						<text class='singer overflow' v-if='!showOther'> &nbsp; - &nbsp; {{item._singer || item.artist}}</text>
+					<view class="name overflow">
+						<text class='name music-name'>{{item.name}} </text>
+						<text class='singer overflow' v-if='!showOther'> &nbsp; - &nbsp;
+							{{item._singer || item.artist}}</text>
 					</view>
 					<view class="singer" v-if="showOther">
 						<view class="icon icons" v-if='item.originCoverType===1&&showOther'>
 							原唱
 						</view>
-						<view class="hi-res icons" v-if='item.privilege&&item.privilege.playMaxBrLevel==="hires"&&showOther'>
+						<view class="hi-res icons"
+							v-if='item.privilege&&(item.privilege.playMaxBrLevel==="hires"||item.privilege.maxbr===999000)&&showOther'>
 							Hi-Res
 						</view>
 						<view class="hi-res icons sq" v-else-if='item.sq&&showOther'>
 							SQ
 						</view>
-						<text class='singer' v-if="showOther" :class="{overflow:!(item.al&&item.al.name)}">{{item._singer }} </text>
-						<text class='al overflow' v-if='item.al&&item.al.name&&showOther'>-{{item.name}}</text>
+						<text class='singer' v-if="showOther"
+							:class="{overflow:!(item.al&&item.al.name)}">{{ item._singer ||item.artists&&item.artists[0]&&item.artists[0].name }} </text>
+						<text class='al overflow' v-if='item.al&&item.al.name&&showOther'>-{{item.al&&item.al.name}}</text>
+						<text class='al overflow' v-else-if='item.album&&item.album.name&&showOther'>-{{item.album&&item.album.name}}</text>
 					</view>
 					<view class="alias sColor overflow" v-if='item.alia&&item.alia.length>0 && showOther'>
 						{{item.alia[0]}}
 					</view>
 				</view>
-				<view class="video-icon icons" v-if='(item.mv||item.mvid)&&showOther' @click.stop="linkToVideoDetail(item)">
-					<view class='iconfont icon-play' ></view>
+				<view class="video-icon icons" v-if='(item.mv||item.mvid)&&showOther'
+					@click.stop="linkToVideoDetail(item)">
+					<view class='iconfont icon-play'></view>
 				</view>
 			</u-list-item>
 		</u-list>
@@ -41,7 +46,7 @@
 </template>
 
 <script setup>
-	import { ref,watch,watchEffect,onMounted, computed, defineExpose } from 'vue'
+	import { ref, watch, watchEffect, onMounted, computed, defineExpose } from 'vue'
 	import { loopAdd, playAndCommit } from '@/utils/plugins.js'
 	import { useStore } from 'vuex'
 
@@ -58,9 +63,9 @@
 			default: true
 		},
 		// 展示其他 
-		showOther:{
-			type:Boolean,
-			default:true
+		showOther: {
+			type: Boolean,
+			default: true
 		}
 	})
 	const showMusicList = ref([])
@@ -69,23 +74,23 @@
 		showMusicList.value = loopAdd({
 			list: uni.$u.deepClone(list)
 		})
-	}, { immediate: true, deep: true})
-	
+	}, { immediate: true, deep: true })
+
 	const store = useStore()
 	// 寻找当前播放数组中第几项活跃
-	const currentIndex = computed(()=>{
-		return  store.getters.findCurrentPlayIndex(showMusicList.value)
+	const currentIndex = computed(() => {
+		return store.getters.findCurrentPlayIndex(showMusicList.value)
 	})
-	
-	const playMusic= (index)=>{
-		uni.$u.throttle(()=>{
-			playAndCommit({musicList:showMusicList.value,index})
-		},500)
+
+	const playMusic = (index) => {
+		uni.$u.throttle(() => {
+			playAndCommit({ musicList: showMusicList.value, index })
+		}, 500)
 	}
-	
-// 视频页面跳转
+
+	// 视频页面跳转
 	const linkToVideoDetail = (item) => {
-		const { mv,  mvid } = item
+		const { mv, mvid } = item
 		const vid = mv || mvid
 		uni.navigateTo({
 			url: `/subPackages/video-detail/video-detail?vid=${vid}`,
@@ -93,11 +98,11 @@
 	}
 	//滚动loadmore
 	const scrollToBottom = () => {
-		uni.$u.throttle(()=>{
+		uni.$u.throttle(() => {
 			emit('scrollToBottom')
 		}, 1000)
 	}
-	
+
 	defineExpose({ playMusic })
 </script>
 
@@ -108,16 +113,20 @@
 
 	view.music-list-table {
 		height: 100%;
+
 		.u-list.music-list-t {
 			height: calc(100% - 20rpx) !important;
+
 			.u-list-item.list-item {
 				flex-direction: row;
 				padding: 10rpx 15rpx;
 				box-sizing: border-box;
 				margin-top: 10rpx;
-				&.currentActive{
+
+				&.currentActive {
 					background: rgba(255, 100, 0, 0.3);
 				}
+
 				.u-cell {
 					:deep(.u-cell__body) {
 						padding: 0;
@@ -134,20 +143,26 @@
 					flex: 1 1 auto;
 					max-width: calc(100% - 200rpx);
 					overflow: hidden;
-					&.bespread{
+
+					&.bespread {
 						width: 100% !important;
 						max-width: 100%;
-						@include flex(flex-start,center);
+						@include flex(flex-start, center);
 						flex-direction: row;
 					}
-					&.fillUp{
+
+					&.fillUp {
 						width: 100% !important;
 						max-width: 100% !important;
 					}
+
 					view.name {
 						flex: 0 0 auto;
 						width: 100%;
-						text.singer{
+						text.music-name{
+							@include overflowMul(2);
+						}
+						text.singer {
 							font-size: 26rpx;
 							color: $singerColor;
 						}
@@ -163,6 +178,7 @@
 						color: $singerColor;
 						flex: 0 0 auto;
 						width: 100%;
+
 						view.icon {
 							padding: 2rpx 6rpx;
 							box-sizing: border-box;
@@ -188,10 +204,11 @@
 						}
 
 						text.singer {
-							flex:  0 0 auto;
+							flex: 0 0 auto;
 							white-space: nowrap;
 						}
-						text.al{
+
+						text.al {
 							flex: 1 1 auto;
 							text-overflow: ellipsis;
 							overflow: hidden;
@@ -206,7 +223,8 @@
 					flex: 0 0 auto;
 					width: 80rpx;
 					@include flex(center, center);
-					view.iconfont{
+
+					view.iconfont {
 						font-size: 28rpx;
 						border: 1px solid #aaa;
 						border-radius: 10rpx;

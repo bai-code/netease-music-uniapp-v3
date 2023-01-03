@@ -42,12 +42,12 @@ $_bgColor:#eee;  //个别内容背景图
 @mixin flex($justify,$align){
 	display: flex;
 	justify-content: $justify;
-	align-items: $align;
+	align-items: $align;  
 }
 @mixin textCenter($left){
 	position: absolute;
 	left: $left;
-	transform: translateX($left);
+	transform: translateX(-$left);
 }
 @mixin positions($left,$top){
 	@include textCenter($left);
