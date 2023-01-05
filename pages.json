@@ -78,7 +78,7 @@
 		}, {
 			"path": "ranking-list/ranking-list",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "排行榜",
 				"enablePullDownRefresh": false
 			}
 

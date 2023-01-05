@@ -54,7 +54,6 @@
 				break;
 		}
 		if(!newSongList.value[titleIndex.value]){
-			console.log('222');
 			newSongList.value[titleIndex.value] = []
 			const { data } = await store.dispatch('getInfo', { path: `/top/song?type=${t}` })
 			newSongList.value[titleIndex.value] = loopAdd({ list: data, singerName: 'artists' })
