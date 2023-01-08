@@ -8,7 +8,7 @@
 						<icon type="search"></icon>
 						<text class="placeholder">搜索歌曲/歌手</text>
 					</view>
-				</view>
+				</view> 
 			</template>
 		</nav-header>
 
@@ -95,14 +95,17 @@
 
 
 				<!-- 排行榜 -->
-				<view class="ranking-list">
-					<nav-title title='榜单热门' linkUrl='/subPackages/ranking-list/ranking-list' ></nav-title>
-					<swiper :interval="3000" :duration="500" next-margin="50rpx">
-						<swiper-item v-for="item in topList" :key='item'>
-							<image :src="item.coverImgUrl" mode="scaleToFill"></image>
+				<view class="ranking-list" v-if="topList.length>0">
+					<nav-title title='热门榜单' linkUrl='/subPackages/ranking-list/ranking-list' ></nav-title>
+					<swiper :interval="3000" :duration="500" next-margin="50rpx" >
+						<swiper-item v-for="item in topList" :key='item&&item.id'>
+							<image :src="item&&item.coverImgUrl" mode="scaleToFill"
+							@click="linkToPlaylistDetail(item.id)"
+							></image>
 							<view class="s-item">
-								<view class="item overflow" v-for="(i,index) in item.tracks" :key='index'>
-									{{index + 1}}. {{i.first}} <text class="singer overflow"> - {{i.second}}</text>
+								<view :class="['item','overflow', {active:track.id===musicInfo.id}]" v-for="(track,index) in item.tracks.slice(0,3)" 
+								:key='track.id'  @click="playPlaylistMusic(item.tracks.slice(0,3), index)">
+									{{index + 1 }}. {{track.name}} <text class="singer overflow"> - {{track._singer}}</text>
 								</view>
 							</view>
 						</swiper-item>
@@ -117,6 +120,7 @@
 							<movable-view class="movable-item" direction='all' v-for="(singer,index) in hotSingerList"
 								:key="singer.id" :x='movableList[index].left' :y='movableList[index].top'
 								:inertia='true' scale='true' scale-min="0.5" scale-max="1.5" animation
+								@touchstart="touchstart" @click="touchclick"
 								@change="movableChange(index)" :style="{zIndex:activeIndex===index?9:1}">
 								<!-- {{index}} -->
 								<image :src="singer.img1v1Url" class="s-pic" mode="scaleToFill"></image>
@@ -164,6 +168,10 @@
 
 	const store = useStore();
 
+	const musicInfo = computed(()=>{
+		return store.state.musicInfo
+	})
+
 	const bannerList = ref([]);
 	const getBannerList = async () => {
 		const { banners = [] } = await store.dispatch("getInfo", {
@@ -173,6 +181,7 @@
 		// console.log(res);
 	};
 
+// 搜索页面跳转
 	const searchPage = () => {
 		uni.navigateTo({
 			url: "/subPackages/search/search",
@@ -223,23 +232,31 @@
 		// console.log(newSongList.value, result);
 	}
 
-	// 榜单热门
-	const topList = shallowRef([])
+	// 热门榜单
+	const topList = computed(()=>{
+		return store.state.rankingInfo.mainRankingList
+	})
 	const getTopList = async () => {
-		const { list = [] } = await store.dispatch('getInfo', { path: '/toplist/detail' })
-		const newList = list.filter(item => {
-			return !!item.ToplistType
-		})
-		topList.value = newList
-		// console.log(list, newList);
+		store.dispatch('rankingInfo/getRankingList')
 	}
+	const playPlaylistMusic = (musicList, index) => {
+		playAndCommit({ musicList, index })
+	}
+	
 
 	// 获取热门歌手
 	const hotSingerList = shallowRef([])
 	const getHotSinger = async () => {
 		const { artists = [] } = await store.dispatch('getInfo', { path: '/top/artists?limit=8' })
 		hotSingerList.value = artists
-		// console.log(artists);
+	}
+
+	// 榜单图片跳转
+	const linkToPlaylistDetail = (id) => {
+		if(!id)return
+		uni.navigateTo({
+			url:`/subPackages/playlist-detail/playlist-detail?pid=${id}`
+		})
 	}
 
 	// 让拖动那一项，最靠前 z-index 最大
@@ -279,7 +296,7 @@
 			loadMore.value = true
 			await getHotSinger()
 			 getNewSongsList()
-			 getTopList()
+			 // getTopList()
 			if (movableList.value.length === 0) {
 				const { offsetWidth, offsetHeight } = movableRef.value.$el
 				movableList.value = sortPosition({
@@ -302,6 +319,14 @@
 			loadMore.value = false
 		}
 	}
+	
+	const touchclick = () => {
+		console.log(1);
+	}
+	
+	const touchstart = () => {
+		console.log(22);
+	}
 
 	onMounted(() => {
 		const { platform, screenWidth } = uni.getSystemInfoSync();
@@ -317,20 +342,8 @@
 
 		getBannerList();
 		getPlaylist()
-		// getTopList()
+		getTopList()
 
-		// getHotSinger()
-		// getVideoCategoryList()
-		// getRecommendMvList()
-		// console.log(movableRef.value.$el.offsetWidth);
-		// const { offsetWidth, offsetHeight } = movableRef.value.$el
-		// movableList.value = sortPosition({
-		// 	width: offsetWidth,
-		// 	height: offsetHeight,
-		// 	gutter: 5,
-		// 	domSize: 50,
-		// 	num: 8
-		// })
 	});
 </script>
 
@@ -490,7 +503,12 @@
 									margin-bottom: 20rpx;
 									width: 100%;
 									@include flex(flex-start, center);
-
+									&.active{
+										color: $bgColor;
+										text.singer{
+											color: inherit;
+										}
+									}
 									text.singer {
 										flex: 1 1 auto;
 										color: $singerColor;

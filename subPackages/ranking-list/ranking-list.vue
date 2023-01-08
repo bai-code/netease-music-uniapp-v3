@@ -49,37 +49,44 @@
 </template>
 
 <script setup>
-	import  { computed, onMounted, reactive, ref } from 'vue'
+	import  { computed, reactive, ref } from 'vue'
 	import { useStore } from  'vuex'
 	import { loopAdd, playAndCommit } from '@/utils/plugins.js'
 	
 	const store = useStore()
 	
-	const mainRankingList = reactive([])  // 主要的
-	const getPlaylistDetail = async (id,index) => {
-		const { playlist } = await store.dispatch('getInfo', { path:`/playlist/detail?id=${id}&limit=8` })
-		playlist.tracks = loopAdd({ list:playlist.tracks })
-		mainRankingList[index]= playlist
-	}
+	// const mainRankingList = reactive([])  // 主要的
+	// const getPlaylistDetail = async (id,index) => {
+	// 	const { playlist } = await store.dispatch('getInfo', { path:`/playlist/detail?id=${id}&limit=8` })
+	// 	playlist.tracks = loopAdd({ list:playlist.tracks })
+	// 	mainRankingList[index]= playlist
+	// }
 	
 	
 	// const rankingInfo = ref({})
-	const rankingList = ref([]) // 小列表
-	const getRankingList = async () => {
-		const { list = []} = await store.dispatch('getInfo', { path:`/toplist` })
-		const tempRankingList = list.filter(item=>{
-			return item.ToplistType
-		})
-		rankingList.value = list.filter(item=>{
-			return !item.ToplistType
-		})
+	// const rankingList = ref([]) // 列表
+	// const getRankingList = async () => {
+	// 	const { list = []} = await store.dispatch('getInfo', { path:`/toplist` })
+	// 	const tempRankingList = list.filter(item=>{
+	// 		return item.ToplistType
+	// 	})
+	// 	rankingList.value = list.filter(item=>{
+	// 		return !item.ToplistType
+	// 	})
 		
-		tempRankingList.forEach((item,index)=>{
-			const { id } = item
-			getPlaylistDetail(item.id,index)
-		})
+	// 	tempRankingList.forEach((item,index)=>{
+	// 		const { id } = item
+	// 		getPlaylistDetail(item.id,index)
+	// 	})
 		
-	}
+	// }
+	const mainRankingList = computed(()=>{
+		return store.state.rankingInfo.mainRankingList 
+	})
+	
+	const rankingList = computed(()=>{
+		return store.state.rankingInfo.rankingList
+	})
 	
 	// 播放单曲
 	const playMusic = (list,index) => {
@@ -99,9 +106,9 @@
 		return store.state.musicInfo.id
 	})
 	
-	onMounted(()=>{
-		getRankingList()
-	})
+	// onMounted(()=>{
+	// 	getRankingList()
+	// })
 	
 </script>
 

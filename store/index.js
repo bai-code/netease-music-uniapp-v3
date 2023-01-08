@@ -1,4 +1,5 @@
 import userInfo from './userInfo.js'
+import rankingInfo from './rankingInfo.js'
 
 import { createStore } from 'vuex'
 import  axios from '@/utils/axios.js' 
@@ -180,6 +181,7 @@ export default createStore({
 		}
 	},
 	modules:{
-		userInfo
+		userInfo,
+		rankingInfo
 	}
 })
