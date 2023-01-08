@@ -106,7 +106,7 @@
 		}, {
 			"path": "singer-list/singer-list",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "歌手",
 				"enablePullDownRefresh": false
 			}
 
