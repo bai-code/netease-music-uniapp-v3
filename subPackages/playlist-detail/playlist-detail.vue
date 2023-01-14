@@ -56,7 +56,7 @@
 
 		<view class="music-list" v-if="showMusicList">
 			<music-list-table ref="listRef" :musicList='showMusicList' :showImage='false'
-				@scrollToBottom='scrollToBottom'></music-list-table>
+				@scrollToBottom='scrollToBottom' :isExact='false' ></music-list-table>
 		</view>
 	</view>
 </template>

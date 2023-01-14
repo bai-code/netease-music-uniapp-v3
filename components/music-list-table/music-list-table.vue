@@ -6,7 +6,7 @@
 				<u-cell v-if='showImage'>
 					<template #icon>
 						<u-avatar shape="square" size="45"
-							:src='item.picUrl||item.al&&item.al.picUrl||item.album&&item.album.blurPicUrl'>
+							:src='item.picUrl||item.al&&item.al.picUrl||item.album&&(item.album.blurPicUrl||item.album.artist&&item.album.artist.img1v1Url)'>
 						</u-avatar>
 					</template>
 				</u-cell>
@@ -66,21 +66,26 @@
 		showOther: {
 			type: Boolean,
 			default: true
+		},
+		isExact:{ // 是否精确匹配播放列表，添加播放当前歌曲样式
+			type:Boolean,
+			default:false
 		}
 	})
 	const showMusicList = ref([])
 	watch(() => props.musicList, (list) => {
 		if (list.length === 0) return
-		showMusicList.value = loopAdd({
-			list: uni.$u.deepClone(list)
-		})
+		showMusicList.value = loopAdd({ list })
 	}, { immediate: true, deep: true })
 
 	const store = useStore()
 	// 寻找当前播放数组中第几项活跃
 	const currentIndex = computed(() => {
-		return store.getters.findCurrentPlayIndex(showMusicList.value)
+		const { isExact, musicList } = props
+		return store.getters.findCurrentPlayIndex(musicList, isExact)
+		
 	})
+	
 
 	const playMusic = (index) => {
 		uni.$u.throttle(() => {

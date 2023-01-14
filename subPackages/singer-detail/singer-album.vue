@@ -71,7 +71,6 @@
 
 	const getSingerAlbum = async (id) => {
 		const len = albumList.length || 0
-		// console.log(len);
 		const { hotAlbums, more } = await store.dispatch(
 		'getInfo', { path: `/artist/album?id=${id}&limit=5&offset=${len}` })
 		albumList.push(...hotAlbums)
@@ -103,9 +102,6 @@
 <style lang="scss">
 	view.singer-album {
 
-		// .music-list{
-		// 	padding-left: 100rpx !important;
-		// }
 		view.hot-50 {
 			margin-top: 30rpx;
 

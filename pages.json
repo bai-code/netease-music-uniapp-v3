@@ -61,14 +61,16 @@
 				"enablePullDownRefresh": false
 			}
 
-		}, {
-			"path": "song-list/song-list",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
+		}, 
+		// {
+		// 	"path": "song-list/song-list",
+		// 	"style": {
+		// 		"navigationBarTitleText": "",
+		// 		"enablePullDownRefresh": false
+		// 	}
 
-		}, {
+		// }, 
+		{
 			"path": "recommend-daily/recommend-daily",
 			"style": {
 				"navigationBarTitleText": "推荐歌单",
@@ -96,14 +98,16 @@
 				"enablePullDownRefresh": false
 			}
 
-		}, {
-			"path": "video-content/video-content",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
+		}, 
+		// {
+		// 	"path": "video-content/video-content",
+		// 	"style": {
+		// 		"navigationBarTitleText": "",
+		// 		"enablePullDownRefresh": false
+		// 	}
 
-		}, {
+		// },
+		{
 			"path": "singer-list/singer-list",
 			"style": {
 				"navigationBarTitleText": "歌手",

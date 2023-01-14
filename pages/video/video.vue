@@ -18,17 +18,19 @@
 					@click="orderIndex=index">{{item.order}}</text>
 			</view>
 		</view>
-		<scroll-view scroll-y class="video-content" :lower-threshold="100" @scrolltolower="scrollToBottom">
-			<view class="video-item-container" v-if=" videoList[areaIndex]&& videoList[areaIndex][typeIndex]">
-				<video-temp v-for="video in videoList[areaIndex][typeIndex][orderIndex]" :key="video.id"
-					:videoInfo='video' :showSinger='true'>
-				</video-temp>
-				<view class="empty" v-if="!isLoading&&videoList[areaIndex][typeIndex][orderIndex].length===0">
-					empty
-				</view>
-			</view>
-
-		</scroll-view>
+		
+		<view class="video-content" v-if=" videoList[areaIndex]&& videoList[areaIndex][typeIndex]">
+			<scrollView-backTop :isLoading='isLoading' :backTopDistance='{right:"40rpx", bottom:"160rpx"}'
+			@scrollToBottom='scrollToBottom' >
+					<video-temp v-for="video in videoList[areaIndex][typeIndex][orderIndex]" :key="video.id"
+						:videoInfo='video' :showSinger='true'>
+					</video-temp>
+					<view class="empty" v-if="!isLoading&&videoList[areaIndex][typeIndex][orderIndex].length===0">
+						empty
+					</view>
+			</scrollView-backTop>
+		</view>
+		
 	</view>
 </template>
 
@@ -184,13 +186,14 @@
 		}
 
 		// 视频内容区域
-		scroll-view.video-content {
-			height: calc(100% - 200rpx);
+		view.video-content {
+			height: calc(100% - 210rpx);
 			margin-top: 10rpx;
 
 			view.video-item-container {
-				@include flex(space-between, center);
-				flex-wrap: wrap;
+				flex: 0 0 auto;
+				height: 100%;
+				width: 100%;
 			}
 
 			view.empty {

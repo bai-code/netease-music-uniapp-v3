@@ -47,6 +47,7 @@ export const loopAdd = ({ list = [], singerName = 'ar', nest/*嵌套*/, reName,/
 		if(playCountName){
 			item._playCount = computedCount(item[playCountName])
 		}
+		item.picUrl = item.picUrl||item.al&&item.al.picUrl||item.album&&(item.album.blurPicUrl||item.album.artist&&item.album.artist.img1v1Url)
 	})
 	return list
 }
@@ -65,6 +66,9 @@ export const playAndCommit = ({ musicList = [], index, musicInfo = {} }) => {
 		store.commit('saveMusicList', { musicList })
 	}
 	store.dispatch('getMusicInfo', { musicInfo: info, index })
+	uni.navigateTo({
+		url:'/subPackages/music-detail/music-detail'
+	})
 }
 
 export const fillNum = (num, fillNum = 2 /*填充到几位数*/ ) => {

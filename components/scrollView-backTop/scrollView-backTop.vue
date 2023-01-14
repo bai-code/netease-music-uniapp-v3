@@ -1,11 +1,12 @@
 <template>
 	<scroll-view class="container" scroll-y @scrolltolower="scrollToBottom" 
-	 @scroll='scrollEvent' :scroll-top='scrollDistance' 
+	 @scroll='scrollEvent' :scroll-top='scrollDistance' lower-threshold='200'
 	 enable-back-to-top scroll-with-animation>
 		<view class="view-content">
 			<slot></slot>
 		</view>
-		<view class="back-top" @click="backToTop" v-if="scrollDistance>distanceTop">
+		<view class="back-top" @click="backToTop" :style="[backTopDistance]"
+		v-if="scrollDistance>distanceTop">
 			<view class="iconfont icon-back-top"></view>
 		</view>
 		<u-loading-icon :show="isLoading"  v-if="needLoading" ></u-loading-icon>
@@ -19,7 +20,7 @@
 		distanceTop: {
 			// 距离顶部距离，出现滚动条
 			type: Number,
-			default: 800
+			default: 600
 		},
 		needLoading:{  // 是否需要 loading
 			type:Boolean,
@@ -29,6 +30,15 @@
 			// needloading 为 false 此条不生效
 			type:Boolean,
 			default:false
+		},
+		backTopDistance:{
+			type:Object,
+			default:()=>{
+				return {
+					right: '40rpx',
+					bottom: '80rpx'
+				}
+			}
 		}
 	})
 
@@ -63,8 +73,8 @@
 		}
 		view.back-top {
 			position: fixed;
-			right: 40rpx;
-			bottom: 60rpx;
+			// right: 40rpx;
+			// bottom: 80rpx;
 			background: rgba(200, 200, 200, 0.8);
 			height: 80rpx;
 			width: 80rpx;

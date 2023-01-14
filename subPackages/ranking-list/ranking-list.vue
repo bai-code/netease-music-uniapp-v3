@@ -10,12 +10,13 @@
 							<image :src="list.coverImgUrl" mode="scaleToFill"></image>
 						</view>
 						<view class="music-list">
-							<view :class="['music-item', { active:currentId===i.id }]" v-for="(i,index) in list.tracks.slice(0,5)"
+							<view :class="['music-item', { active:$store.getters.findCurrentPlayIndex(list.tracks.slice(0,5),false,true)===index }]" 
+							v-for="(i,index) in list.tracks.slice(0,5)"
 							 @click="playMusic(list.tracks.slice(0,5),index)">
 								<text :class="[{top:index<3}, 'index']">{{index + 1}}  </text>
 								<view class="info">
 									<text class="name overflow">&nbsp;. {{ i.name }}</text>
-									<text :class="['singer','overflow', {active:currentId===i.id}]">{{ i._singer }}</text>
+									<text :class="['singer','overflow', {active:$store.getters.findCurrentPlayIndex(list.tracks.slice(0,5),false,true)===index}]">{{ i._singer }}</text>
 								</view>
 							</view>
 							<view class="view-more" @click="linkToMusicDetail(list.id)">
@@ -49,7 +50,7 @@
 </template>
 
 <script setup>
-	import  { computed, reactive, ref } from 'vue'
+	import  { computed, reactive, ref, onMounted } from 'vue'
 	import { useStore } from  'vuex'
 	import { loopAdd, playAndCommit } from '@/utils/plugins.js'
 	
@@ -65,7 +66,6 @@
 	
 	// 播放单曲
 	const playMusic = (list,index) => {
-		console.log(list,index);
 		playAndCommit({ musicList:list,index })
 	}
 	
@@ -76,14 +76,18 @@
 		})
 	}
 	
-	// 标记播放歌曲
-	const currentId = computed(()=>{
-		return store.state.musicInfo.id
-	})
-	
-	// onMounted(()=>{
-	// 	getRankingList()
+	// // 标记播放歌曲
+	// const currentId = computed(()=>{
+	// 	return store.getters.findcurrentPlayIndex()
 	// })
+	
+	onMounted(()=>{
+		console.log(mainRankingList.value,length);
+		if(mainRankingList.value.length===0){
+			store.dispatch('rankingInfo/getRankingList')
+		}
+		// getRankingList()
+	})
 	
 </script>
 

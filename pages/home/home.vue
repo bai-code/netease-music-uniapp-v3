@@ -142,7 +142,7 @@
 
 				<!-- 推荐mv -->
 				<view class="recommend-mv">
-					<nav-title title='推荐mv' linkUrl='/subPackages/video-content/video-content' />
+					<nav-title title='推荐mv' linkUrl='/pages/video/video' linkMode='switchTab' />
 					<view class="mv-content">
 						<template v-for='mv in recommendMvList' :key="mv.id">
 							<video-temp :videoInfo='mv' />

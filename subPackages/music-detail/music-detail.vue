@@ -1,5 +1,5 @@
 <template>
-	<view class='container' >
+	<view class='container' :style="{height:containerHeight}" >
 		<view class="image-fill"  v-if="swiperMusicList[swiperCurrent]"
 		:style='{backgroundImage:`url(${swiperMusicList[swiperCurrent].picUrl})`}'>
 			<!-- 模糊背景图 -->
@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-	import {  computed, nextTick, ref, watch, onBeforeUnmount } from 'vue'
+	import {  computed, nextTick, ref, watch, onBeforeUnmount, onMounted } from 'vue'
 	import { useStore } from 'vuex'
 import musicListTableVue from '../../components/music-list-table/music-list-table.vue';
 	
@@ -255,7 +255,17 @@ import musicListTableVue from '../../components/music-list-table/music-list-tabl
 		}
 		swiperCurrent.value = val
 	}
-	
+	 
+	 // 页面进入有个过渡效果
+	 const containerHeight = ref(0)
+	 onMounted(()=>{
+	 	containerHeight.value = 0
+	 	setTimeout(()=>{
+	 		containerHeight.value = '100%'
+	 	},500)
+	 })
+	 
+	 
 	onBeforeUnmount(()=>{
 		clearInterval(timer.value)
 	})
@@ -263,9 +273,12 @@ import musicListTableVue from '../../components/music-list-table/music-list-tabl
 
 <style lang="scss" scoped>
 view.container{
-	height: 100%;
-	overflow: hidden;
-	position: relative;
+	// height: 100%;
+	// overflow: hidden;
+	position: absolute;
+	transition: all 0.5s;
+	bottom: 0;
+	width: 100%;
 	@include flex(space-between,center);
 	flex-direction: column;
 	box-sizing: border-box;

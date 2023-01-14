@@ -1,7 +1,7 @@
 <template>
 	<view class="video-detail">
 		<view class="video">
-			<video :src="mvDetail.src"></video>
+			<video :src="mvDetail.src" ></video>
 		</view>
 
 		<scroll-view class="video-content" scroll-y :lower-threshold="200" @scrolltolower="scrollToBottom">
@@ -59,7 +59,8 @@
 <script setup>
 	import { onLoad } from '@dcloudio/uni-app'
 	import { useStore } from 'vuex'
-	import { ref } from 'vue'
+	import { ref, watch } from 'vue'
+	import audio from '@/utils/audio';
 
 	const store = useStore()
 	// const isPlay = ref(false)
@@ -93,17 +94,18 @@
 		hasMore.value = more
 		hasMoreHot.value = moreHot
 		isLoading.value = false
-		console.log(comments);
 	}
 
 	const scrollToBottom = () => {
 		if (!hasMore.value) return
 		getMvCommentList(_id.value)
 	}
-
+	
+	
 	onLoad((options) => {
 		const { mvId, vid } = options
 		_id.value = mvId || vid
+		store.commit('pause')
 		if (_id.value) {
 			isLoading.value = true
 			getMvDetail(_id.value)

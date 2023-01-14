@@ -6,7 +6,7 @@
 				<view  v-for="(item,index) in lyricList" :key='index'
 				:class="[{active:index===activeIndex},'lyric-text']" > 
 					<text v-if='lyricVersion===0' @click.stop="playHere(item,index)">{{item&&item[1]}}</text>
-					<view v-else>{{item}}</view>
+					<view v-else >{{item}}</view>
 				</view>
 			</scroll-view>
 			<text class="empty" v-else>
@@ -64,19 +64,7 @@
 		activeIndex.value = index
 		store.commit('seekProgress', { s:time })
 	}
-	// let timer = null
-	// const showEmpty = ref(false)
-	// watch(()=>props.lyricList, (list)=>{
-	// 	timer = setTimeout(()=>{
-	// 		showEmpty.value = list.length>0?false:true
-	// 		clearTimeout(timer)
-	// 		console.log(2222);
-	// 	},1000)
-	// },{  immediate:true,deep:true})
 	
-	// onBeforeUnmount(()=>{
-	// 	clearTimeout(timer)
-	// })
 </script>
 
 <style lang="scss" scoped>
@@ -91,12 +79,12 @@ view.lyric-container{
 			height: 100%;
 			view.lyric-text{
 				text-align: center;
-				height: 30px;
+				min-height: 30px;
 				line-height: 30px;
 				font-size: 28rpx;
 				&.active{
 					color: $bgColor;
-					height: 40px;
+					min-height: 40px;
 					font-size: 32rpx;
 					line-height: 40px;
 					// padding: 15rpx 0;

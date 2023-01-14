@@ -35,12 +35,28 @@ export default createStore({
 	},
 	getters:{
 		findCurrentPlayIndex(state){
-			return  (list) => {
+			// isExact  控制榜单页面不同榜单相同歌曲
+			// isSpecial 首页 跳转到 排行榜页面
+			return  (list, isExact=true /*是否精确比较*/, isSpecial/*特殊*/ ) => {
 				const _list = list || state.musicList
 				const targetList = JSON.stringify(state.musicList)
 				const originList = JSON.stringify(_list)
-				if(targetList === originList){
-					const {  id } = state.musicInfo
+				const { id } = state.musicInfo
+				if(isExact){
+					if(targetList === originList ){
+						return _list.findIndex(item=>{
+							return item.id === id
+						})
+					}
+				} else if(isSpecial){
+					const tList = JSON.stringify(state.musicList.slice(0,3))
+					const oList = JSON.stringify(list.slice(0,3))
+					if(tList===oList){
+						return _list.findIndex(item=>{
+							return item.id === id
+						})
+					}
+				} else {
 					return _list.findIndex(item=>{
 						return item.id === id
 					})

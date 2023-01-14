@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-	import { ref, computed } from 'vue'
+	import { ref, computed, watch } from 'vue'
 	import { useStore } from 'vuex'
 	import { onShow, onHide } from '@dcloudio/uni-app'
 
@@ -45,7 +45,7 @@
 	})
 	
 	const timer = ref(null)
-	const imgDeg = ref(0)
+	const imgDeg = ref(0)  //图片旋转角度
 	
 	const startInterval = ()=>{
 		timer.value = setInterval(()=>{
@@ -54,17 +54,27 @@
 	}
 	// 改变播放状态
 	const changePlayStatus = (status) => {
-		if(status==='play'){
-				startInterval()
-		}else{
-			clearInterval(timer.value)
-			timer.value = null
-		}
+		// if(status==='play'){
+		// 		startInterval()
+		// }else{
+		// 	clearInterval(timer.value)
+		// 	timer.value = null
+		// }
 		
 		store.commit('changePlayStatus', {
 			isPlay: status === 'play' ? true : false
 		})
 	}
+	
+	watch(isPlay,(flag)=>{
+		if(flag){
+			startInterval()
+		}else{
+			clearInterval(timer.value)
+			timer.value = null
+		}
+	}, { immediate:true })
+	
 	// 下一首
 	const changeMusic = () => {
 		store.dispatch('changeMusic', {})
