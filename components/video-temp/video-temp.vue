@@ -8,6 +8,7 @@
 					</text>
 					<text>{{videoInfo._playCount}}</text>
 				</view>
+				<slot></slot>
 			</view>
 			<view class="description">
 				<text>{{videoInfo.name}} {{showSinger?' - ' + videoInfo._singer:''}}</text>
@@ -70,6 +71,7 @@
 				height: calc(100% - 80rpx);
 				width: 100%;
 				flex: 0 0 auto;
+				position: relative;
 				image.pic {
 					height: 100%;
 					width: 100%;

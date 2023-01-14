@@ -131,7 +131,7 @@
 
 				<!-- 独家放送 -->
 				<view class="personalized">
-					<nav-title title='独家放送' />
+					<nav-title title='独家放送'  linkUrl='/subPackages/exclusive-broadcast/exclusive-broadcast' />
 					<view class="personalized-content">
 						<template v-for="video in personalizedList" :key="video.id">
 							<video-temp :videoInfo='video' />

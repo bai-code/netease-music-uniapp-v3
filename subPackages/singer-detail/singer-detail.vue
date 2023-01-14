@@ -1,6 +1,6 @@
 <template>
 	<view class="singer-detail" >
-		<scroll-view scroll-y="true" class="singer-content" @scrolltolower="scrollToBottom" :lower-threshold='100'
+		<scroll-view scroll-y="true" class="singer-content" @scrolltolower="scrollToBottom" lower-threshold='200'
 			@scroll='scrollEvent' :scroll-top='scrollTopDistance' enable-back-to-top scroll-with-animation>
 			<view class="detail-info" v-if="singerDetail.artist">
 				<view class="image">

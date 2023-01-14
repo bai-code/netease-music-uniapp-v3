@@ -124,7 +124,16 @@
 				"enablePullDownRefresh": false
 			}
 
-		}]
+		}    ,{
+                    "path" : "exclusive-broadcast/exclusive-broadcast",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "独家放送",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

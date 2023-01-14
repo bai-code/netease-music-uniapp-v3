@@ -98,7 +98,7 @@
 
 	const scrollToBottom = () => {
 		if (!hasMore.value) return
-		getMvCommentList(mvId.value)
+		getMvCommentList(_id.value)
 	}
 
 	onLoad((options) => {
