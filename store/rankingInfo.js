@@ -19,7 +19,7 @@ export default {
 	},
 	actions:{
 		async getPlaylistDetail ({ commit }, { id, index }){
-			const { playlist } = await axios({ url:`/playlist/detail?id=${id}&limit=8` })
+			const { playlist = {} } = await axios({ url:`/playlist/detail?id=${id}&limit=8` })
 			playlist.tracks = loopAdd({ list:playlist.tracks })
 			// mainRankingList[index]= playlist
 			commit('saveRankingList', { list:playlist,index, isMain:true })

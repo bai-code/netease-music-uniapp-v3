@@ -15,11 +15,13 @@
 				return store.state.musicList
 			})
 			
+			// 歌曲播放结束
 			audio.onEnded(()=>{
 				store.dispatch('changeMusic', { params:'next' })
 			})
 			
 			const oldTime = ref(0)
+			// 歌曲更新播放时间
 			audio.onTimeUpdate(()=>{
 				const currentTime = parseInt(audio.currentTime)
 				if(oldTime.value !== currentTime){
@@ -27,15 +29,10 @@
 				}
 			})
 			
-			
+			store.dispatch('getInfo', { path:'/register/anonimous' })
 			
 		},
-		// onShow: function() {
-		// 	console.log('App Show')
-		// },
-		// onHide: function() {
-		// 	console.log('App Hide')
-		// }
+		
 	}
 </script>
 

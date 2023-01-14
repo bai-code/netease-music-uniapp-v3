@@ -2,7 +2,7 @@
 	<view class="video-temp">
 		<view class="video-container" @click="linkToVideoDetail">
 			<view class="image">
-				<image class="pic" :src="videoInfo.picUrl||videoInfo.cover" mode="scaleToFill"></image>
+				<image class="pic" :src="videoInfo[imageName]||videoInfo.cover" mode="scaleToFill"></image>
 				<view class="play-count" v-if="videoInfo._playCount">
 					<text class="iconfont icon-play">
 					</text>
@@ -27,6 +27,10 @@
 		showSinger:{
 			type:Boolean,
 			default:false
+		},
+		imageName:{ // 展示的图片名字
+			type:String,
+			default:'picUrl'
 		}
 	})
 	

@@ -1,14 +1,15 @@
 <template>
+<!-- 歌手列表 -->
 	<view class="singer-list">
 		<nav-title-select-multiple @changeSelect='changeSelect' :scaleRow='2' 
 		:titleList='titleList' :selectItemList='selectItemList' ></nav-title-select-multiple>
 		<scroll-view scroll-y="true" class="singer-container" @scrolltolower="loadMore" lower-threshold="200" >
 			<view class="content" v-if="singerList[0]">
 				<view class="singer-item" v-for='singer in singerList[selectItemList[0]][selectItemList[1]][selectItemList[2]]' :key='singer.id'
-				@click="linkToSingerDetail"
+				@click="linkToSingerDetail(singer.id)"
 				>
 					<view class="image">
-						<image :src="singer.picUrl" :lazy-load="true" mode="scaleToFill" @click="viewSingerImage(singer.picUrl,$event)"></image>
+						<image :src="singer.img1v1Url || singer.picUrl" :lazy-load="true" mode="scaleToFill" @click="viewSingerImage(singer.picUrl,$event)"></image>
 					</view>
 					<view class="singer-name overflow">
 						{{singer.name}}
@@ -31,7 +32,7 @@
 	const isShow = ref(false)  // 是否大图展示图片
 	const showBigImageSrc = ref('') // 大图展示图片地址
 	
-	const selectItemList = shallowReactive([0,0,1])  // 选择项
+	const selectItemList = shallowReactive([0,0,0])  // 选择项
 	
 	// 标题选择
 	const titleList = reactive([
@@ -163,8 +164,10 @@
 	}, {  immediate:true})
 	
 	// 跳转到歌手详情页面
-	const linkToSingerDetail = () => {
-		
+	const linkToSingerDetail = (id) => {
+		uni.navigateTo({
+			url:`/subPackages/singer-detail/singer-detail?id=${id}`
+		})
 	}
 	
 	// 大图预览歌手图片

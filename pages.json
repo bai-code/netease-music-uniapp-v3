@@ -113,7 +113,14 @@
 		}, {
 			"path": "playlist-detail/playlist-detail",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "专辑详情",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "singer-detail/singer-detail",
+			"style": {
+				"navigationBarTitleText": "歌手详情",
 				"enablePullDownRefresh": false
 			}
 

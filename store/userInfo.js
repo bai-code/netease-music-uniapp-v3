@@ -7,6 +7,7 @@ const tempUserInfo = {
 	nickname:'',
 	userId:''
 }
+
 const userInfo = JSON.parse(localStorage.getItem('userInfo')) || tempUserInfo
 
 export default {
@@ -43,15 +44,16 @@ export default {
 				path = `/login/cellphone?phone=${phone}&captcha=${code}`
 				
 			} else {
-				path = `/login/cellphone`
+				path = `/login/cellphone?phone=${phone}&password=${password}`
 			}
-			const { token, profile } = await axios({ url: path, method:'POST' })
+				const { token, profile, message } = await axios({ url: path })
+			console.log(message);
 			if (token) {
 				const { avatarUrl, nickname, userId } = profile
 				commit('saveInfo', { token, avatarUrl, nickname, userId })
 				return true
 			}
-			return false
+			return message
 		}
 	}
 }

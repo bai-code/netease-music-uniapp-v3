@@ -102,7 +102,7 @@
 							<image :src="item&&item.coverImgUrl" mode="scaleToFill"
 							@click="linkToPlaylistDetail(item.id)"
 							></image>
-							<view class="s-item">
+							<view class="s-item" v-if="item&&item.tracks">
 								<view :class="['item','overflow', {active:track.id===musicInfo.id}]" v-for="(track,index) in item.tracks.slice(0,3)" 
 								:key='track.id'  @click="playPlaylistMusic(item.tracks.slice(0,3), index)">
 									{{index + 1 }}. {{track.name}} <text class="singer overflow"> - {{track._singer}}</text>
@@ -120,7 +120,7 @@
 							<movable-view class="movable-item" direction='all' v-for="(singer,index) in hotSingerList"
 								:key="singer.id" :x='movableList[index].left' :y='movableList[index].top'
 								:inertia='true' scale='true' scale-min="0.5" scale-max="1.5" animation
-								@touchstart="touchstart" @click="touchclick"
+							     @click="linkToSingerDetail(singer.id)"
 								@change="movableChange(index)" :style="{zIndex:activeIndex===index?9:1}">
 								<!-- {{index}} -->
 								<image :src="singer.img1v1Url" class="s-pic" mode="scaleToFill"></image>
@@ -236,9 +236,11 @@
 	const topList = computed(()=>{
 		return store.state.rankingInfo.mainRankingList
 	})
+	// 获取排行歌单数据
 	const getTopList = async () => {
 		store.dispatch('rankingInfo/getRankingList')
 	}
+	// 播放歌单中点击的歌曲
 	const playPlaylistMusic = (musicList, index) => {
 		playAndCommit({ musicList, index })
 	}
@@ -250,6 +252,8 @@
 		const { artists = [] } = await store.dispatch('getInfo', { path: '/top/artists?limit=8' })
 		hotSingerList.value = artists
 	}
+	
+	
 
 	// 榜单图片跳转
 	const linkToPlaylistDetail = (id) => {
@@ -258,12 +262,21 @@
 			url:`/subPackages/playlist-detail/playlist-detail?pid=${id}`
 		})
 	}
-
+	
 	// 让拖动那一项，最靠前 z-index 最大
 	const activeIndex = ref(1)
 	const movableChange = (index) => {
 		if (index !== activeIndex.value) {
 			activeIndex.value = index
+		}
+	}
+	
+	// 跳转到歌手详情页
+	const linkToSingerDetail = (id) =>{
+		if(id){
+			uni.navigateTo({
+				url:`/subPackages/singer-detail/singer-detail?id=${id}`
+			})
 		}
 	}
 
@@ -318,14 +331,6 @@
 			getRecommendMvList()
 			loadMore.value = false
 		}
-	}
-	
-	const touchclick = () => {
-		console.log(1);
-	}
-	
-	const touchstart = () => {
-		console.log(22);
 	}
 
 	onMounted(() => {

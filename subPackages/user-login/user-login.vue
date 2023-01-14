@@ -98,14 +98,13 @@
 			const flag = await formRef.value.validate()
 			if (flag === true) {
 				const { phone, password, code, email } = model.value.userInfo
-				
 				const res = await store.dispatch('userInfo/userLogin', { phone, code, password, email })
 				console.log(res);
-				if (res) {
+				if (res===true) {
 					uni.navigateBack()
 				} else {
 					uni.showToast({
-						title: '登陆失败',
+						title: res,
 						icon: 'error'
 					})
 				}
@@ -216,7 +215,7 @@
 			bottom: 30rpx;
 			@include flex(flex-end, center);
 			font-size: 28rpx;
-			color: $primary;
+			color: $userColor;
 			width: 100%;
 
 			text {
