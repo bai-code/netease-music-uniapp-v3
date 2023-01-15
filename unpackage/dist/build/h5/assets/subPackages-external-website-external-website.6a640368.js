@@ -1,0 +1,1 @@
+import{f as s,_ as a,o as e,c as r,w as t,i as u,a as l,a9 as n}from"./index.88361eb6.js";const o={__name:"external-website",setup(o){const c=s("");return a((s=>{c.value=s.url})),(s,a)=>{const o=n,f=u;return e(),r(f,null,{default:t((()=>[l(o,{src:c.value,progress:"true"},null,8,["src"])])),_:1})}}};export{o as default};
